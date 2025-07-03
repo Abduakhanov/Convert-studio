@@ -40,7 +40,11 @@ export default defineConfig({
       }
     })
   ],
+  resolve: {
+    dedupe: ['react', 'react-dom', 'immer', 'zustand'],
+  },
   optimizeDeps: {
     exclude: ['lucide-react'],
+    include: ['immer', 'zustand/middleware/immer']
   },
 });
