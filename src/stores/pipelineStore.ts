@@ -5,6 +5,8 @@ import { NodeInstance, Pipeline, Connection } from '../types/node-spec';
 import { UploadedFile } from '../types';
 import { useHistoryStore } from './historyStore';
 import { toast } from 'sonner';
+import { nanoid } from 'nanoid';
+import { NODE_SPECS } from '../data/nodeSpecs';
 
 interface PipelineStore {
   pipeline: Pipeline;
@@ -15,6 +17,7 @@ interface PipelineStore {
   
   // Actions
   addNode: (node: NodeInstance) => void;
+  addFileNode: (file: UploadedFile) => void;
   removeNode: (nodeId: string) => void;
   updateNode: (nodeId: string, updates: Partial<NodeInstance>) => void;
   moveNode: (nodeId: string, position: { x: number; y: number }) => void;
@@ -68,6 +71,40 @@ export const usePipelineStore = create<PipelineStore>()(
         // Save to history
         useHistoryStore.getState().pushState(get().pipeline);
         toast.success(`Added ${node.nodeSpec.metadata.name}`);
+      },
+
+      addFileNode: (file) => {
+        const fileInputSpec = NODE_SPECS.find(spec => spec.id === 'file-input');
+        if (!fileInputSpec) return;
+
+        const nodeId = nanoid();
+        const newNode: NodeInstance = {
+          id: nodeId,
+          nodeSpec: fileInputSpec,
+          position: { 
+            x: 50, 
+            y: 50 + get().pipeline.nodes.length * 100 
+          },
+          parameters: {},
+          status: 'idle',
+          outputs: {
+            output: file
+          }
+        };
+
+        set((draft) => {
+          // Add file to uploaded files if not already there
+          if (!draft.uploadedFiles.find(f => f.id === file.id)) {
+            draft.uploadedFiles.push(file);
+          }
+          
+          // Add file input node
+          draft.pipeline.nodes.push(newNode);
+          draft.pipeline.metadata.modified = new Date().toISOString();
+        });
+
+        useHistoryStore.getState().pushState(get().pipeline);
+        toast.success(`Added ${file.name} to pipeline`);
       },
 
       removeNode: (nodeId) => {

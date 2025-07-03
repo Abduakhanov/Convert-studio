@@ -1,16 +1,42 @@
 import { NodeSpec } from '../types/node-spec';
 
 export const NODE_SPECS: NodeSpec[] = [
+  // File Input Node
+  {
+    id: 'file-input',
+    type: 'input',
+    version: '1.0.0',
+    metadata: {
+      name: 'File Input',
+      description: 'Upload and input files into the pipeline',
+      category: 'utility',
+      tags: ['input', 'upload', 'file']
+    },
+    inputs: [],
+    outputs: [{
+      id: 'output',
+      name: 'File',
+      mimeTypes: ['*/*'],
+      required: true,
+      multiple: false
+    }],
+    parameters: [],
+    uiMeta: {
+      icon: 'Upload',
+      color: '#6B7280'
+    }
+  },
+
   // Document Conversion Nodes
   {
     id: 'pdf-to-docx',
     type: 'converter',
     version: '1.0.0',
     metadata: {
-      name: 'PDF to DOCX',
+      name: 'PDF → DOCX',
       description: 'Convert PDF documents to Microsoft Word format using LibreOffice',
       category: 'document',
-      tags: ['pdf', 'docx', 'office', 'libreoffice']
+      tags: ['pdf', 'docx', 'office', 'libreoffice', 'document']
     },
     inputs: [{
       id: 'input',
@@ -57,10 +83,10 @@ export const NODE_SPECS: NodeSpec[] = [
     type: 'converter',
     version: '1.0.0',
     metadata: {
-      name: 'DOCX to PDF',
+      name: 'DOCX → PDF',
       description: 'Convert Microsoft Word documents to PDF format',
       category: 'document',
-      tags: ['docx', 'pdf', 'office']
+      tags: ['docx', 'pdf', 'office', 'document']
     },
     inputs: [{
       id: 'input',
@@ -83,378 +109,227 @@ export const NODE_SPECS: NodeSpec[] = [
     }
   },
 
-  // Image Processing Nodes
   {
-    id: 'image-resize',
-    type: 'processor',
+    id: 'pptx-to-pdf',
+    type: 'converter',
     version: '1.0.0',
     metadata: {
-      name: 'Resize Image',
-      description: 'Resize images using ImageMagick with various algorithms',
-      category: 'image',
-      tags: ['resize', 'scale', 'imagemagick']
+      name: 'PPTX → PDF',
+      description: 'Convert PowerPoint presentations to PDF format',
+      category: 'document',
+      tags: ['pptx', 'pdf', 'powerpoint', 'presentation']
     },
     inputs: [{
       id: 'input',
-      name: 'Image',
-      mimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+      name: 'PPTX File',
+      mimeTypes: ['application/vnd.openxmlformats-officedocument.presentationml.presentation'],
       required: true,
       multiple: false
     }],
     outputs: [{
       id: 'output',
-      name: 'Resized Image',
-      mimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+      name: 'PDF File',
+      mimeTypes: ['application/pdf'],
       required: true,
       multiple: false
     }],
-    parameters: [
-      {
-        id: 'width',
-        name: 'Width',
-        type: 'number',
-        defaultValue: 800,
-        required: true,
-        validation: { min: 1, max: 8192 },
-        uiHints: { suffix: 'px' }
-      },
-      {
-        id: 'height',
-        name: 'Height',
-        type: 'number',
-        defaultValue: 600,
-        required: true,
-        validation: { min: 1, max: 8192 },
-        uiHints: { suffix: 'px' }
-      },
-      {
-        id: 'maintain_aspect',
-        name: 'Maintain Aspect Ratio',
-        type: 'boolean',
-        defaultValue: true,
-        required: false
-      }
-    ],
+    parameters: [],
     uiMeta: {
-      icon: 'Image',
-      color: '#059669',
-      preview: {
-        enabled: true,
-        maxSize: 10 * 1024 * 1024,
-        supportedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
-      }
+      icon: 'Presentation',
+      color: '#D97706'
     }
   },
 
   {
-    id: 'image-format-convert',
+    id: 'csv-to-xlsx',
     type: 'converter',
     version: '1.0.0',
     metadata: {
-      name: 'Convert Image Format',
-      description: 'Convert between different image formats',
-      category: 'image',
-      tags: ['convert', 'format', 'jpeg', 'png', 'webp']
+      name: 'CSV → XLSX',
+      description: 'Convert CSV files to Excel spreadsheet format',
+      category: 'document',
+      tags: ['csv', 'xlsx', 'excel', 'spreadsheet']
     },
     inputs: [{
       id: 'input',
-      name: 'Image',
-      mimeTypes: ['image/*'],
+      name: 'CSV File',
+      mimeTypes: ['text/csv'],
       required: true,
       multiple: false
     }],
     outputs: [{
       id: 'output',
-      name: 'Converted Image',
-      mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+      name: 'XLSX File',
+      mimeTypes: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
       required: true,
       multiple: false
     }],
     parameters: [{
-      id: 'format',
-      name: 'Output Format',
+      id: 'delimiter',
+      name: 'CSV Delimiter',
       type: 'select',
-      defaultValue: 'jpeg',
-      required: true,
+      defaultValue: ',',
+      required: false,
       validation: {
         options: [
-          { value: 'jpeg', label: 'JPEG' },
-          { value: 'png', label: 'PNG' },
-          { value: 'webp', label: 'WebP' },
-          { value: 'gif', label: 'GIF' }
+          { value: ',', label: 'Comma (,)' },
+          { value: ';', label: 'Semicolon (;)' },
+          { value: '\t', label: 'Tab' },
+          { value: '|', label: 'Pipe (|)' }
         ]
       }
     }],
     uiMeta: {
-      icon: 'Image',
-      color: '#7C3AED'
+      icon: 'Database',
+      color: '#059669'
     }
   },
 
-  // AI Processing Nodes
+  // Image Processing Nodes
   {
-    id: 'ai-summarize',
-    type: 'ai-processor',
-    version: '1.0.0',
-    metadata: {
-      name: 'AI Summarize',
-      description: 'Generate intelligent summaries using large language models',
-      category: 'ai',
-      tags: ['ai', 'summarize', 'llm', 'text']
-    },
-    inputs: [{
-      id: 'input',
-      name: 'Text Document',
-      mimeTypes: ['text/plain', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
-      required: true,
-      multiple: false
-    }],
-    outputs: [{
-      id: 'output',
-      name: 'Summary',
-      mimeTypes: ['text/plain'],
-      required: true,
-      multiple: false
-    }],
-    parameters: [
-      {
-        id: 'model',
-        name: 'AI Model',
-        type: 'select',
-        defaultValue: 'gpt-3.5-turbo',
-        required: true,
-        validation: {
-          options: [
-            { value: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo' },
-            { value: 'gpt-4', label: 'GPT-4' },
-            { value: 'claude-3-sonnet', label: 'Claude 3 Sonnet' },
-            { value: 'ollama-llama2', label: 'Llama 2 (Local)' }
-          ]
-        }
-      },
-      {
-        id: 'length',
-        name: 'Summary Length',
-        type: 'select',
-        defaultValue: 'medium',
-        required: false,
-        validation: {
-          options: [
-            { value: 'short', label: 'Short (1-2 paragraphs)' },
-            { value: 'medium', label: 'Medium (3-5 paragraphs)' },
-            { value: 'long', label: 'Long (6+ paragraphs)' }
-          ]
-        }
-      },
-      {
-        id: 'language',
-        name: 'Output Language',
-        type: 'select',
-        defaultValue: 'en',
-        required: false,
-        validation: {
-          options: [
-            { value: 'en', label: 'English' },
-            { value: 'ru', label: 'Russian' },
-            { value: 'es', label: 'Spanish' },
-            { value: 'fr', label: 'French' },
-            { value: 'de', label: 'German' }
-          ]
-        }
-      }
-    ],
-    uiMeta: {
-      icon: 'Brain',
-      color: '#F59E0B'
-    }
-  },
-
-  {
-    id: 'ai-translate',
-    type: 'ai-processor',
-    version: '1.0.0',
-    metadata: {
-      name: 'AI Translate',
-      description: 'Translate text using advanced AI models',
-      category: 'ai',
-      tags: ['ai', 'translate', 'language', 'llm']
-    },
-    inputs: [{
-      id: 'input',
-      name: 'Text',
-      mimeTypes: ['text/plain'],
-      required: true,
-      multiple: false
-    }],
-    outputs: [{
-      id: 'output',
-      name: 'Translated Text',
-      mimeTypes: ['text/plain'],
-      required: true,
-      multiple: false
-    }],
-    parameters: [
-      {
-        id: 'target_language',
-        name: 'Target Language',
-        type: 'select',
-        defaultValue: 'ru',
-        required: true,
-        validation: {
-          options: [
-            { value: 'en', label: 'English' },
-            { value: 'ru', label: 'Russian' },
-            { value: 'es', label: 'Spanish' },
-            { value: 'fr', label: 'French' },
-            { value: 'de', label: 'German' },
-            { value: 'zh', label: 'Chinese' },
-            { value: 'ja', label: 'Japanese' }
-          ]
-        }
-      }
-    ],
-    uiMeta: {
-      icon: 'Languages',
-      color: '#8B5CF6'
-    }
-  },
-
-  {
-    id: 'text-to-speech',
-    type: 'ai-processor',
-    version: '1.0.0',
-    metadata: {
-      name: 'Text to Speech',
-      description: 'Convert text to natural-sounding speech',
-      category: 'ai',
-      tags: ['tts', 'speech', 'audio', 'voice']
-    },
-    inputs: [{
-      id: 'input',
-      name: 'Text',
-      mimeTypes: ['text/plain'],
-      required: true,
-      multiple: false
-    }],
-    outputs: [{
-      id: 'output',
-      name: 'Audio',
-      mimeTypes: ['audio/mpeg', 'audio/wav'],
-      required: true,
-      multiple: false
-    }],
-    parameters: [
-      {
-        id: 'voice',
-        name: 'Voice',
-        type: 'select',
-        defaultValue: 'alloy',
-        required: true,
-        validation: {
-          options: [
-            { value: 'alloy', label: 'Alloy' },
-            { value: 'echo', label: 'Echo' },
-            { value: 'fable', label: 'Fable' },
-            { value: 'onyx', label: 'Onyx' },
-            { value: 'nova', label: 'Nova' },
-            { value: 'shimmer', label: 'Shimmer' }
-          ]
-        }
-      },
-      {
-        id: 'speed',
-        name: 'Speed',
-        type: 'range',
-        defaultValue: 1.0,
-        required: false,
-        validation: { min: 0.25, max: 4.0 },
-        uiHints: { step: 0.25 }
-      }
-    ],
-    uiMeta: {
-      icon: 'Volume2',
-      color: '#EF4444'
-    }
-  },
-
-  // Audio Processing Nodes
-  {
-    id: 'audio-convert',
+    id: 'png-to-jpeg',
     type: 'converter',
     version: '1.0.0',
     metadata: {
-      name: 'Convert Audio Format',
-      description: 'Convert between different audio formats using FFmpeg',
-      category: 'audio',
-      tags: ['audio', 'convert', 'ffmpeg', 'mp3', 'wav']
+      name: 'PNG → JPEG',
+      description: 'Convert PNG images to JPEG format with compression',
+      category: 'image',
+      tags: ['png', 'jpeg', 'jpg', 'image', 'compression']
     },
     inputs: [{
       id: 'input',
-      name: 'Audio File',
-      mimeTypes: ['audio/*'],
+      name: 'PNG Image',
+      mimeTypes: ['image/png'],
       required: true,
       multiple: false
     }],
     outputs: [{
       id: 'output',
-      name: 'Converted Audio',
-      mimeTypes: ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/aac'],
+      name: 'JPEG Image',
+      mimeTypes: ['image/jpeg'],
       required: true,
       multiple: false
     }],
-    parameters: [
-      {
-        id: 'format',
-        name: 'Output Format',
-        type: 'select',
-        defaultValue: 'mp3',
-        required: true,
-        validation: {
-          options: [
-            { value: 'mp3', label: 'MP3' },
-            { value: 'wav', label: 'WAV' },
-            { value: 'ogg', label: 'OGG' },
-            { value: 'aac', label: 'AAC' }
-          ]
-        }
-      },
-      {
-        id: 'bitrate',
-        name: 'Bitrate',
-        type: 'select',
-        defaultValue: '192k',
-        required: false,
-        validation: {
-          options: [
-            { value: '128k', label: '128 kbps' },
-            { value: '192k', label: '192 kbps' },
-            { value: '256k', label: '256 kbps' },
-            { value: '320k', label: '320 kbps' }
-          ]
-        }
-      }
-    ],
+    parameters: [{
+      id: 'quality',
+      name: 'JPEG Quality',
+      type: 'range',
+      defaultValue: 85,
+      required: false,
+      validation: { min: 1, max: 100 },
+      uiHints: { suffix: '%' }
+    }],
     uiMeta: {
-      icon: 'Music',
+      icon: 'Image',
+      color: '#7C3AED',
+      preview: {
+        enabled: true,
+        maxSize: 10 * 1024 * 1024,
+        supportedTypes: ['image/png']
+      }
+    }
+  },
+
+  {
+    id: 'png-to-webp',
+    type: 'converter',
+    version: '1.0.0',
+    metadata: {
+      name: 'PNG → WebP',
+      description: 'Convert PNG images to modern WebP format for better compression',
+      category: 'image',
+      tags: ['png', 'webp', 'image', 'compression', 'modern']
+    },
+    inputs: [{
+      id: 'input',
+      name: 'PNG Image',
+      mimeTypes: ['image/png'],
+      required: true,
+      multiple: false
+    }],
+    outputs: [{
+      id: 'output',
+      name: 'WebP Image',
+      mimeTypes: ['image/webp'],
+      required: true,
+      multiple: false
+    }],
+    parameters: [{
+      id: 'quality',
+      name: 'WebP Quality',
+      type: 'range',
+      defaultValue: 80,
+      required: false,
+      validation: { min: 1, max: 100 },
+      uiHints: { suffix: '%' }
+    }],
+    uiMeta: {
+      icon: 'Image',
       color: '#10B981'
     }
   },
 
-  // Video Processing Nodes
   {
-    id: 'video-to-gif',
-    type: 'converter',
+    id: 'jpeg-to-txt-ocr',
+    type: 'ai-processor',
     version: '1.0.0',
     metadata: {
-      name: 'Video to GIF',
-      description: 'Convert video clips to optimized GIF animations',
-      category: 'video',
-      tags: ['video', 'gif', 'animation', 'ffmpeg']
+      name: 'JPEG → TXT (OCR)',
+      description: 'Extract text from JPEG images using OCR technology',
+      category: 'ai',
+      tags: ['jpeg', 'ocr', 'text', 'extraction', 'tesseract']
     },
     inputs: [{
       id: 'input',
-      name: 'Video File',
-      mimeTypes: ['video/mp4', 'video/webm', 'video/avi', 'video/mov'],
+      name: 'JPEG Image',
+      mimeTypes: ['image/jpeg', 'image/jpg'],
+      required: true,
+      multiple: false
+    }],
+    outputs: [{
+      id: 'output',
+      name: 'Extracted Text',
+      mimeTypes: ['text/plain'],
+      required: true,
+      multiple: false
+    }],
+    parameters: [{
+      id: 'language',
+      name: 'OCR Language',
+      type: 'select',
+      defaultValue: 'eng',
+      required: false,
+      validation: {
+        options: [
+          { value: 'eng', label: 'English' },
+          { value: 'rus', label: 'Russian' },
+          { value: 'spa', label: 'Spanish' },
+          { value: 'fra', label: 'French' },
+          { value: 'deu', label: 'German' }
+        ]
+      }
+    }],
+    uiMeta: {
+      icon: 'ScanText',
+      color: '#F59E0B'
+    }
+  },
+
+  // Video/Audio Processing Nodes
+  {
+    id: 'mp4-to-gif',
+    type: 'converter',
+    version: '1.0.0',
+    metadata: {
+      name: 'MP4 → GIF',
+      description: 'Convert MP4 video clips to optimized GIF animations',
+      category: 'video',
+      tags: ['mp4', 'gif', 'video', 'animation', 'ffmpeg']
+    },
+    inputs: [{
+      id: 'input',
+      name: 'MP4 Video',
+      mimeTypes: ['video/mp4'],
       required: true,
       multiple: false
     }],
@@ -492,20 +367,100 @@ export const NODE_SPECS: NodeSpec[] = [
         required: false,
         validation: { min: 1, max: 30 },
         uiHints: { suffix: 'fps' }
-      },
-      {
-        id: 'width',
-        name: 'Width',
-        type: 'number',
-        defaultValue: 480,
-        required: false,
-        validation: { min: 100, max: 1920 },
-        uiHints: { suffix: 'px' }
       }
     ],
     uiMeta: {
       icon: 'Film',
       color: '#F97316'
+    }
+  },
+
+  {
+    id: 'gif-to-mp4',
+    type: 'converter',
+    version: '1.0.0',
+    metadata: {
+      name: 'GIF → MP4',
+      description: 'Convert GIF animations to MP4 video format',
+      category: 'video',
+      tags: ['gif', 'mp4', 'video', 'animation']
+    },
+    inputs: [{
+      id: 'input',
+      name: 'GIF Animation',
+      mimeTypes: ['image/gif'],
+      required: true,
+      multiple: false
+    }],
+    outputs: [{
+      id: 'output',
+      name: 'MP4 Video',
+      mimeTypes: ['video/mp4'],
+      required: true,
+      multiple: false
+    }],
+    parameters: [{
+      id: 'quality',
+      name: 'Video Quality',
+      type: 'select',
+      defaultValue: 'medium',
+      required: false,
+      validation: {
+        options: [
+          { value: 'low', label: 'Low (Small file)' },
+          { value: 'medium', label: 'Medium' },
+          { value: 'high', label: 'High (Large file)' }
+        ]
+      }
+    }],
+    uiMeta: {
+      icon: 'Film',
+      color: '#EF4444'
+    }
+  },
+
+  {
+    id: 'wav-to-mp3',
+    type: 'converter',
+    version: '1.0.0',
+    metadata: {
+      name: 'WAV → MP3',
+      description: 'Convert WAV audio files to compressed MP3 format',
+      category: 'audio',
+      tags: ['wav', 'mp3', 'audio', 'compression', 'ffmpeg']
+    },
+    inputs: [{
+      id: 'input',
+      name: 'WAV Audio',
+      mimeTypes: ['audio/wav'],
+      required: true,
+      multiple: false
+    }],
+    outputs: [{
+      id: 'output',
+      name: 'MP3 Audio',
+      mimeTypes: ['audio/mpeg'],
+      required: true,
+      multiple: false
+    }],
+    parameters: [{
+      id: 'bitrate',
+      name: 'MP3 Bitrate',
+      type: 'select',
+      defaultValue: '192k',
+      required: false,
+      validation: {
+        options: [
+          { value: '128k', label: '128 kbps (Small)' },
+          { value: '192k', label: '192 kbps (Good)' },
+          { value: '256k', label: '256 kbps (High)' },
+          { value: '320k', label: '320 kbps (Best)' }
+        ]
+      }
+    }],
+    uiMeta: {
+      icon: 'Music',
+      color: '#10B981'
     }
   }
 ];

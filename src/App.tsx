@@ -3,8 +3,10 @@ import { Toaster } from 'sonner';
 import { NodeLibrary } from './components/NodeLibrary';
 import { PipelineCanvas } from './components/PipelineCanvas';
 import { ToolBar } from './components/ToolBar';
+import { FileUpload } from './components/FileUpload';
 import { CommandPalette } from './components/CommandPalette';
 import { HotKeys } from './components/HotKeys';
+import { StatusBar } from './components/StatusBar';
 
 function App() {
   const [showCommandPalette, setShowCommandPalette] = useState(false);
@@ -17,6 +19,9 @@ function App() {
       {/* Toolbar */}
       <ToolBar />
       
+      {/* File Upload Area */}
+      <FileUpload />
+      
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Node Library Sidebar */}
@@ -25,6 +30,9 @@ function App() {
         {/* Pipeline Canvas */}
         <PipelineCanvas />
       </div>
+
+      {/* Status Bar */}
+      <StatusBar />
 
       {/* Command Palette */}
       <CommandPalette 

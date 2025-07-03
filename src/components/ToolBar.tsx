@@ -8,13 +8,17 @@ import {
   Undo2, 
   Redo2,
   Settings,
-  Download,
-  Upload,
+  ArrowUpTrayIcon,
+  ArrowDownTrayIcon,
   Zap
 } from 'lucide-react';
 import { usePipelineStore } from '../stores/pipelineStore';
 import { useHistoryStore } from '../stores/historyStore';
 import { toast } from 'sonner';
+
+// Fixed import/export icons with proper semantics
+const ImportIcon = ArrowDownTrayIcon; // Download arrow = Import (bringing data in)
+const ExportIcon = ArrowUpTrayIcon;   // Upload arrow = Export (sending data out)
 
 export const ToolBar: React.FC = () => {
   const { 
@@ -146,21 +150,21 @@ export const ToolBar: React.FC = () => {
             </button>
           </div>
 
-          {/* Import/Export */}
+          {/* Import/Export - Fixed Icons */}
           <div className="flex items-center gap-1 pr-3 border-r border-gray-200">
             <button
               onClick={handleImport}
-              className="p-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-              title="Import Pipeline"
+              className="flex items-center gap-2 p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+              title="Import Pipeline (.json)"
             >
-              <Upload className="w-4 h-4" />
+              <ImportIcon className="w-4 h-4" />
             </button>
             <button
               onClick={handleExport}
-              className="p-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-              title="Export Pipeline"
+              className="flex items-center gap-2 p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+              title="Export Pipeline (.json)"
             >
-              <Download className="w-4 h-4" />
+              <ExportIcon className="w-4 h-4" />
             </button>
           </div>
 
