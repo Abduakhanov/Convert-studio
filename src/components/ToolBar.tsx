@@ -1,17 +1,5 @@
 import React from 'react';
-import { 
-  Play, 
-  Square, 
-  Save, 
-  FolderOpen, 
-  Plus, 
-  Undo2, 
-  Redo2,
-  Settings,
-  ArrowUpTrayIcon,
-  ArrowDownTrayIcon,
-  Zap
-} from 'lucide-react';
+import { Play, Square, Save, FolderOpen, Plus, Undo2, Redo2, Settings, ArrowUpIcon as ArrowUpTrayIcon, ArrowDownIcon as ArrowDownTrayIcon, Zap } from 'lucide-react';
 import { usePipelineStore } from '../stores/pipelineStore';
 import { useHistoryStore } from '../stores/historyStore';
 import { toast } from 'sonner';
