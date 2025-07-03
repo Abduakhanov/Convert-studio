@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { ArrowDownTrayIcon, ArrowPathIcon } from "lucide-react";
+import { ArrowDownIcon as ArrowDownTrayIcon, ArrowUpIcon as ArrowPathIcon } from "lucide-react";
 import mime from "mime";
 
 /**
