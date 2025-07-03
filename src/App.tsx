@@ -1,43 +1,49 @@
 import React, { useState } from 'react';
-import { Node } from 'reactflow';
-import { ToolBar } from './components/ToolBar';
-import { FileUpload } from './components/FileUpload';
+import { Toaster } from 'sonner';
 import { NodeLibrary } from './components/NodeLibrary';
-import { PipelineCanvasWithProvider } from './components/PipelineCanvas';
-import { PropertyPanel } from './components/PropertyPanel';
-import { ConversionNode } from './types';
+import { PipelineCanvas } from './components/PipelineCanvas';
+import { ToolBar } from './components/ToolBar';
+import { CommandPalette } from './components/CommandPalette';
+import { HotKeys } from './components/HotKeys';
 
 function App() {
-  const [selectedNode, setSelectedNode] = useState<Node | null>(null);
-  const [draggedNode, setDraggedNode] = useState<ConversionNode | null>(null);
-
-  const handleNodeDragStart = (node: ConversionNode) => {
-    setDraggedNode(node);
-  };
-
-  const handleNodeSelect = (node: Node | null) => {
-    setSelectedNode(node);
-  };
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
 
   return (
-    <div className="h-screen bg-gray-100 flex flex-col">
-      {/* Header */}
-      <ToolBar />
+    <div className="h-screen flex flex-col bg-gray-50">
+      {/* Global Hotkeys */}
+      <HotKeys onOpenCommandPalette={() => setShowCommandPalette(true)} />
       
-      {/* File Upload */}
-      <FileUpload />
+      {/* Toolbar */}
+      <ToolBar />
       
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Node Library */}
-        <NodeLibrary onNodeDragStart={handleNodeDragStart} />
+        {/* Node Library Sidebar */}
+        <NodeLibrary />
         
-        {/* Canvas */}
-        <PipelineCanvasWithProvider onNodeSelect={handleNodeSelect} />
-        
-        {/* Properties Panel */}
-        <PropertyPanel node={selectedNode} />
+        {/* Pipeline Canvas */}
+        <PipelineCanvas />
       </div>
+
+      {/* Command Palette */}
+      <CommandPalette 
+        isOpen={showCommandPalette}
+        onClose={() => setShowCommandPalette(false)}
+      />
+
+      {/* Toast Notifications */}
+      <Toaster 
+        position="bottom-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: 'white',
+            border: '1px solid #E5E7EB',
+            color: '#374151'
+          }
+        }}
+      />
     </div>
   );
 }
